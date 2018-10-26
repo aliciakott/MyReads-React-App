@@ -30,15 +30,22 @@ class BooksApp extends React.Component {
   updateShelf = (book, event) => {
     let shelf = event.target.value
     let books = this.state.books
+
     let selectedBook = books.filter((b) => b.id === book.id)
     BooksAPI.update(book, shelf).then(() => {
-      console.log(selectedBook)
-      selectedBook[0].shelf = shelf
-      books.map((b) => {
-        if (b.id === selectedBook[0].id) {
-          b.shelf = selectedBook[0].shelf
-        }
-      })
+      if (selectedBook[0] !== undefined) {
+        selectedBook[0].shelf = shelf
+        books.map((b) => {
+          if (b.id === selectedBook[0].id) {
+            b.shelf = selectedBook[0].shelf
+          }
+          return null
+        })
+      } else {
+        selectedBook = book
+        selectedBook.shelf = shelf
+        books.push(selectedBook)
+      }
       this.setState({
         books: books
       })

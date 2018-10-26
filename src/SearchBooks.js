@@ -38,8 +38,6 @@ class SearchBooks extends Component {
           .then((results) => {
               this.updateResults(results, false)
           })
-          .then(console.log(Array.isArray(this.state.searchResults))
-          )
       } else {
         this.updateResults([], false)
       }
@@ -47,6 +45,16 @@ class SearchBooks extends Component {
   }
 
   render() {
+    if (this.state.searchResults.length > 1) {
+      this.state.searchResults.map((book) => {
+        if (book.imageLinks === undefined) {
+          book.imageLinks = {
+            thumbnail: ''
+          }
+        }
+        return null
+      })
+    }
 
     return (
       <div className="search-books">
@@ -61,7 +69,7 @@ class SearchBooks extends Component {
               However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
               you don't find a specific author or title. Every search is limited by search terms.
             */}
-            <input type="text" placeholder="Search by title or author" /*value={this.state.query}*/ onChange={(e) => this.updateQuery(e.target.value)}/>
+            <input type="text" placeholder="Search by title or author" onChange={(e) => this.updateQuery(e.target.value)}/>
 
           </div>
         </div>
@@ -73,7 +81,7 @@ class SearchBooks extends Component {
               <li key={book.id}>
                 <div className="book">
                   <div className="book-top">
-                    <div className="book-cover" style={{ backgroundImage: `url(${book.imageLinks.thumbnail !== undefined && (book.imageLinks.thumbnail)})` }}></div>
+                    <div className="book-cover" style={{ backgroundImage: `url(${book.imageLinks.thumbnail})` }}></div>
                     <div className="book-shelf-changer">
                       <select value="move" onChange={(event) => this.props.changeShelf(book, event)}>
                         <option value="move" disabled>Move to...</option>
@@ -93,8 +101,10 @@ class SearchBooks extends Component {
           </div>
         )}
 
-        {Array.isArray(this.state.searchResults) === false && (
-          <div>Sorry! No matches.</div>
+
+        {(this.state.searchResults === undefined ||
+          this.state.searchResults.length === undefined) && (
+            <div>Sorry! No matches.</div>
         )}
 
       </div>
