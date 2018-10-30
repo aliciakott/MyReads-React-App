@@ -4,11 +4,12 @@ import React, { Component } from 'react'
 //import sortBy from 'sort-by'
 import { Link } from 'react-router-dom'
 import * as BooksAPI from './BooksAPI'
+import EachBook from './EachBook.js'
 
 class SearchBooks extends Component {
   state = {
     searchResults: [],
-    runSearch: false
+    querySuccess: false
   }
 
   updateQuery = (query) => {
@@ -16,41 +17,50 @@ class SearchBooks extends Component {
     if (newQuery !== '') {
       BooksAPI.search(newQuery)
         .then((results) => {
-          this.setState(
-            {
-              searchResults: results
-            }
-          )
+          if (Array.isArray(results)) {
+            this.setState({
+              searchResults: results,
+              querySuccess: true
+            })
+          } else {
+            this.setState({
+              searchResults: results,
+              querySuccess: false
+              })
+          }
         })
     } else {
-      this.setState(
-        {
-          searchResults: []
-        }
-      )
+      this.setState({
+        searchResults: [],
+        querySuccess: false
+        })
     }
   }
 
-  updateResults = (results) => {
-    this.setState(
-      {
-        searchResults: results
-      }
-    )
-  }
-
-
-  render() {
-    if (this.state.searchResults.length > 1) {
+  checkKeys = () => {
+    if (Array.isArray(this.state.searchResults)) {
       this.state.searchResults.map((book) => {
         if (book.imageLinks === undefined) {
           book.imageLinks = {
             thumbnail: ''
           }
         }
-        return null
+        if (book.title === undefined) {
+          book.title = ''
+        }
+        if (book.authors === undefined) {
+          book.authors = ['']
+        }
+        if (book.shelf === undefined) {
+          book.shelf = 'none'
+        }
       })
     }
+    return null
+  }
+
+  render() {
+    this.checkKeys()
 
     return (
       <div className="search-books">
@@ -70,31 +80,18 @@ class SearchBooks extends Component {
           </div>
         </div>
 
-        {Array.isArray(this.state.searchResults) === true && (
+        {this.state.querySuccess === true && (
           <div className="search-books-results">
             <ol className="books-grid">
             {this.state.searchResults.map((book) => (
-              <li key={book.id}>
-                <div className="book">
-                  <div className="book-top">
-                    <div className="book-cover" style={{ backgroundImage: `url(${book.imageLinks.thumbnail})` }}></div>
-                    <div className="book-shelf-changer">
-                      <select value="move" onChange={(event) => this.props.changeShelf(book, event)}>
-                        <option value="move" disabled>Move to...</option>
-                        <option value="currentlyReading">Currently Reading</option>
-                        <option value="wantToRead">Want to Read</option>
-                        <option value="read">Read</option>
-                        <option value="none">None</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div className="book-title">{book.title}</div>
-                  <div className="book-authors">{book.authors}</div>
-                </div>
-              </li>
+              <EachBook book={book} changeShelf={this.props.changeShelf} key={book.id}/>
             ))}
             </ol>
           </div>
+        )}
+
+        {(this.state.querySuccess === false) && (
+          <div>Sorry, no books matched your search terms. Please try again.</div>
         )}
 
       </div>
