@@ -8,41 +8,37 @@ import * as BooksAPI from './BooksAPI'
 class SearchBooks extends Component {
   state = {
     searchResults: [],
-    query: '',
     runSearch: false
   }
 
   updateQuery = (query) => {
-    const newQuery = query.replace(/[^\w\s]|[\d]/g, '')
-    this.setState(
-      {
-        query: newQuery.trim(),
-        runSearch: true
-      }
-    )
-  }
-
-  updateResults = (results, searchAgain) => {
-    this.setState(
-      {
-        searchResults: results,
-        runSearch: searchAgain
-      }
-    )
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state.runSearch === true) {
-      if (this.state.query !== '') {
-        BooksAPI.search(this.state.query)
-          .then((results) => {
-              this.updateResults(results, false)
-          })
-      } else {
-        this.updateResults([], false)
-      }
+    const newQuery = query.replace(/[^\w\s]|[\d]/g, '').trim()
+    if (newQuery !== '') {
+      BooksAPI.search(newQuery)
+        .then((results) => {
+          this.setState(
+            {
+              searchResults: results
+            }
+          )
+        })
+    } else {
+      this.setState(
+        {
+          searchResults: []
+        }
+      )
     }
   }
+
+  updateResults = (results) => {
+    this.setState(
+      {
+        searchResults: results
+      }
+    )
+  }
+
 
   render() {
     if (this.state.searchResults.length > 1) {
@@ -99,12 +95,6 @@ class SearchBooks extends Component {
             ))}
             </ol>
           </div>
-        )}
-
-
-        {(this.state.searchResults === undefined ||
-          this.state.searchResults.length === undefined) && (
-            <div>Sorry! No matches.</div>
         )}
 
       </div>
