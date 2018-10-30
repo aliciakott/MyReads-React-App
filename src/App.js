@@ -1,5 +1,4 @@
 import React from 'react'
-// import * as BooksAPI from './BooksAPI'
 import './App.css'
 import { Route } from 'react-router-dom'
 import ShowBooks from './ShowBooks'
@@ -34,10 +33,9 @@ class BooksApp extends React.Component {
     let selectedBook = books.filter((b) => b.id === book.id)
     BooksAPI.update(book, shelf).then(() => {
       if (selectedBook[0] !== undefined) {
-        selectedBook[0].shelf = shelf
         books.map((b) => {
-          if (b.id === selectedBook[0].id) {
-            b.shelf = selectedBook[0].shelf
+          if (b.id === book.id) {
+            b.shelf = shelf
           }
           return null
         })
@@ -59,7 +57,7 @@ class BooksApp extends React.Component {
           <ShowBooks books={this.state.books} changeShelf={this.updateShelf} />
         )}/>
         <Route path="/search" render={() => (
-          <SearchBooks changeShelf={this.updateShelf} />
+          <SearchBooks books={this.state.books} changeShelf={this.updateShelf} />
         )}/>
       </div>
     )

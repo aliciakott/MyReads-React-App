@@ -1,41 +1,31 @@
 import React, { Component } from 'react'
 //import PropTypes from 'prop-types'
-//import escapeRegExp from 'escape-string-regexp'
 //import sortBy from 'sort-by'
 import { Link } from 'react-router-dom'
+import { debounce } from 'lodash'
 import * as BooksAPI from './BooksAPI'
 import EachBook from './EachBook.js'
 
 class SearchBooks extends Component {
   state = {
     searchResults: [],
-    querySuccess: false
   }
 
-  updateQuery = (query) => {
+  updateQuery = debounce((query) => {
     const newQuery = query.replace(/[^\w\s]|[\d]/g, '').trim()
     if (newQuery !== '') {
       BooksAPI.search(newQuery)
         .then((results) => {
-          if (Array.isArray(results)) {
-            this.setState({
-              searchResults: results,
-              querySuccess: true
-            })
-          } else {
-            this.setState({
-              searchResults: results,
-              querySuccess: false
-              })
-          }
+          this.setState({
+            searchResults: results,
+          })
         })
     } else {
       this.setState({
         searchResults: [],
-        querySuccess: false
         })
     }
-  }
+  }, 500)
 
   checkKeys = () => {
     if (Array.isArray(this.state.searchResults)) {
@@ -52,7 +42,12 @@ class SearchBooks extends Component {
           book.authors = ['']
         }
         if (book.shelf === undefined) {
-          book.shelf = 'none'
+          let checkShelf = this.props.books.filter(b => b.id === book.id)
+          if (checkShelf[0] === undefined) {
+            book.shelf = 'none'
+          } else {
+            book.shelf = checkShelf[0].shelf
+          }
         }
       })
     }
@@ -80,18 +75,18 @@ class SearchBooks extends Component {
           </div>
         </div>
 
-        {this.state.querySuccess === true && (
+        {Array.isArray(this.state.searchResults) ? (
           <div className="search-books-results">
             <ol className="books-grid">
-            {this.state.searchResults.map((book) => (
+            {this.state.searchResults.map(book =>
               <EachBook book={book} changeShelf={this.props.changeShelf} key={book.id}/>
-            ))}
+            )}
             </ol>
           </div>
-        )}
-
-        {(this.state.querySuccess === false) && (
-          <div>Sorry, no books matched your search terms. Please try again.</div>
+        ) : (
+          <div className="search-books-results">
+            Sorry, no books matched your search. Please try again.
+          </div>
         )}
 
       </div>
