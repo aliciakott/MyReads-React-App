@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-//import PropTypes from 'prop-types'
-//import sortBy from 'sort-by'
-import { Link } from 'react-router-dom'
 import { debounce } from 'lodash'
-import * as BooksAPI from './BooksAPI'
+import { Link } from 'react-router-dom'
+//import PropTypes from 'prop-types'
+import sortBy from 'sort-by'
 import EachBook from './EachBook.js'
+import * as BooksAPI from './BooksAPI'
 
 class SearchBooks extends Component {
   state = {
@@ -28,18 +28,19 @@ class SearchBooks extends Component {
   }, 500)
 
   checkKeys = () => {
-    if (Array.isArray(this.state.searchResults)) {
-      this.state.searchResults.map((book) => {
-        if (book.imageLinks === undefined) {
-          book.imageLinks = {
-            thumbnail: ''
-          }
-        }
+    let books = this.state.searchResults
+    if (Array.isArray(books)) {
+      books.map((book) => {
         if (book.title === undefined) {
           book.title = ''
         }
         if (book.authors === undefined) {
           book.authors = ['']
+        }
+        if (book.imageLinks === undefined) {
+          book.imageLinks = {
+            thumbnail: ''
+          }
         }
         if (book.shelf === undefined) {
           let checkShelf = this.props.books.filter(b => b.id === book.id)
@@ -56,6 +57,10 @@ class SearchBooks extends Component {
 
   render() {
     this.checkKeys()
+    let books = this.state.searchResults
+    if (Array.isArray(books)) {
+      books.sort(sortBy('title'))
+    }
 
     return (
       <div className="search-books">
@@ -75,10 +80,10 @@ class SearchBooks extends Component {
           </div>
         </div>
 
-        {Array.isArray(this.state.searchResults) ? (
+        {Array.isArray(books) ? (
           <div className="search-books-results">
             <ol className="books-grid">
-            {this.state.searchResults.map(book =>
+            {books.map(book =>
               <EachBook book={book} changeShelf={this.props.changeShelf} key={book.id}/>
             )}
             </ol>

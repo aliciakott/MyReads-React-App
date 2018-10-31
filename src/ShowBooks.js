@@ -1,10 +1,16 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+//import PropTypes from 'prop-types'
+import sortBy from 'sort-by'
 import EachBook from './EachBook.js'
 
 class ShowBooks extends Component {
 
   render() {
+
+    let books = this.props.books
+    books.sort(sortBy('title'))
+
     return (
       <div className="list-books">
         <div className="list-books-title">
@@ -16,7 +22,7 @@ class ShowBooks extends Component {
               <h2 className="bookshelf-title">Currently Reading</h2>
               <div className="bookshelf-books">
                 <ol className="books-grid">
-                  {this.props.books.filter((book) => book.shelf === 'currentlyReading').map((book) => (
+                  {books.filter((book) => book.shelf === 'currentlyReading').map((book) => (
                     <EachBook book={book} changeShelf={this.props.changeShelf} key={book.id}/>
                   ))}
                 </ol>
@@ -26,7 +32,7 @@ class ShowBooks extends Component {
               <h2 className="bookshelf-title">Want to Read</h2>
               <div className="bookshelf-books">
                 <ol className="books-grid">
-                {this.props.books.filter((book) => book.shelf === 'wantToRead').map((book) => (
+                {books.filter((book) => book.shelf === 'wantToRead').map((book) => (
                   <EachBook book={book} changeShelf={this.props.changeShelf} key={book.id}/>
                 ))}
                 </ol>
@@ -36,7 +42,7 @@ class ShowBooks extends Component {
               <h2 className="bookshelf-title">Read</h2>
               <div className="bookshelf-books">
                 <ol className="books-grid">
-                {this.props.books.filter((book) => book.shelf === 'read').map((book) => (
+                {books.filter((book) => book.shelf === 'read').map((book) => (
                   <EachBook book={book} changeShelf={this.props.changeShelf} key={book.id}/>
                 ))}
                 </ol>
