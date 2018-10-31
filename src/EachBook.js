@@ -7,12 +7,12 @@ class EachBook extends Component {
     // destructuring the props object
     const { book, changeShelf } = this.props
 
+    // for each book-object, this child component takes the following keys and
+    // renders the values: title, authors, imageLinks, and shelf
     return (
       <li>
         <div className="book">
           <div className="book-top">
-            // for each book-object, this child component takes the following keys and
-            // renders the values: title, authors, imageLinks, and shelf
             <div className="book-cover" style={{ backgroundImage: `url(${book.imageLinks.thumbnail})` }}></div>
             <div className="book-shelf-changer">
               <select value={book.shelf} onChange={(event) => changeShelf(book, event)}>

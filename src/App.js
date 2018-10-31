@@ -52,11 +52,11 @@ class BooksApp extends React.Component {
     })
   }
 
+  // Main and search pages are displayed by passing the state of books and
+  // the function updateShelf, as props to the children components 
   render() {
     return (
       <div className="app">
-        // Main and search pages are displayed by passing the state of books and
-        // the function updateShelf, as props to the children components 
         <Route exact path="/" render={() => (
           <ShowBooks books={this.state.books} changeShelf={this.updateShelf} />
         )}/>

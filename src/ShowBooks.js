@@ -11,6 +11,9 @@ class ShowBooks extends Component {
     let books = this.props.books
     books.sort(sortBy('title'))
 
+    // instead of repeating the list items, .map() calls the child Component
+    // EachBook, sending it the object "book" and changeShelf function as props
+    // react-router-dom uses the URL to control the UI, instead of setting the state
     return (
       <div className="list-books">
         <div className="list-books-title">
@@ -22,8 +25,6 @@ class ShowBooks extends Component {
               <h2 className="bookshelf-title">Currently Reading</h2>
               <div className="bookshelf-books">
                 <ol className="books-grid">
-                  // instead of repeating the list items, .map() calls the child Component
-                  // EachBook, sending it the object "book" and changeShelf function as props
                   {books.filter((book) => book.shelf === 'currentlyReading').map((book) => (
                     <EachBook book={book} changeShelf={this.props.changeShelf} key={book.id}/>
                   ))}
@@ -34,8 +35,6 @@ class ShowBooks extends Component {
               <h2 className="bookshelf-title">Want to Read</h2>
               <div className="bookshelf-books">
                 <ol className="books-grid">
-                // instead of repeating the list items, .map() calls the child Component
-                // EachBook, sending it the object "book" and changeShelf function as props
                 {books.filter((book) => book.shelf === 'wantToRead').map((book) => (
                   <EachBook book={book} changeShelf={this.props.changeShelf} key={book.id}/>
                 ))}
@@ -46,8 +45,6 @@ class ShowBooks extends Component {
               <h2 className="bookshelf-title">Read</h2>
               <div className="bookshelf-books">
                 <ol className="books-grid">
-                // instead of repeating the list items, .map() calls the child Component
-                // EachBook, sending it the object "book" and changeShelf function as props
                 {books.filter((book) => book.shelf === 'read').map((book) => (
                   <EachBook book={book} changeShelf={this.props.changeShelf} key={book.id}/>
                 ))}
@@ -56,7 +53,6 @@ class ShowBooks extends Component {
             </div>
           </div>
         </div>
-        // react-router-dom uses the URL to control the UI, instead of setting the state
         <Link to="/search" className="open-search">
           Add a book
         </Link>
