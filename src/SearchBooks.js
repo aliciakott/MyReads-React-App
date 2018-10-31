@@ -12,8 +12,18 @@ class SearchBooks extends Component {
   }
 
   updateQuery = debounce((query) => {
+    // debouncing prevents unexpected behavior in the search results when
+    // backspace is hit too many times/too quickly
+
     const newQuery = query.replace(/[^\w\s]|[\d]/g, '').trim()
+    // newQuery removes ALL numbers and symbols from the search terms, then
+    // trims the spaces off the ends
+
     if (newQuery !== '') {
+      // if the search term is not an empty string (ie, the user only pressed spaces)
+      // the BooksAPI.search method searches the API for matches.
+      // if there is a match, it returns an array of book objects, or, if there are no matches
+      // an object, either of which are then passed to the state
       BooksAPI.search(newQuery)
         .then((results) => {
           this.setState({
@@ -21,6 +31,7 @@ class SearchBooks extends Component {
           })
         })
     } else {
+      // an empty string sets the state to an empty array
       this.setState({
         searchResults: [],
         })
@@ -28,6 +39,8 @@ class SearchBooks extends Component {
   }, 500)
 
   checkKeys = () => {
+    // this function checks the keys of every book object. If a key is expected but
+    // not defined, this function assigns a default value
     let books = this.state.searchResults
     if (Array.isArray(books)) {
       books.map((book) => {
@@ -58,6 +71,8 @@ class SearchBooks extends Component {
   render() {
     this.checkKeys()
     let books = this.state.searchResults
+
+    // sorts the books by title
     if (Array.isArray(books)) {
       books.sort(sortBy('title'))
     }
@@ -80,10 +95,14 @@ class SearchBooks extends Component {
           </div>
         </div>
 
+        // conditional statement checks if an array of search results exists, and displays them.
+        // otherwise a message warning the user that their terms returned no matches is shown
         {Array.isArray(books) ? (
           <div className="search-books-results">
             <ol className="books-grid">
             {books.map(book =>
+              // instead of typing out the list item again, we pass the book-object and changeShelf function
+              // to a child component, which then takes the values of the object keys and renders DOM elements
               <EachBook book={book} changeShelf={this.props.changeShelf} key={book.id}/>
             )}
             </ol>
@@ -100,6 +119,8 @@ class SearchBooks extends Component {
 }
 
 SearchBooks.propTypes = {
+  // verifies that the books prop is an array
+  // and the changeShelf prop is a function
   books: PropTypes.array.isRequired,
   changeShelf: PropTypes.func.isRequired
 }

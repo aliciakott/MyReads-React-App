@@ -4,12 +4,15 @@ import PropTypes from 'prop-types'
 class EachBook extends Component {
 
   render() {
+    // destructuring the props object
     const { book, changeShelf } = this.props
 
     return (
       <li>
         <div className="book">
           <div className="book-top">
+            // for each book-object, this child component takes the following keys and
+            // renders the values: title, authors, imageLinks, and shelf
             <div className="book-cover" style={{ backgroundImage: `url(${book.imageLinks.thumbnail})` }}></div>
             <div className="book-shelf-changer">
               <select value={book.shelf} onChange={(event) => changeShelf(book, event)}>
@@ -30,6 +33,7 @@ class EachBook extends Component {
 }
 
 EachBook.propTypes = {
+  // verifies the book prop is an object and the changeShelf prop is a function
   book: PropTypes.object.isRequired,
   changeShelf: PropTypes.func.isRequired
 }
