@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { debounce } from 'lodash'
 import { Link } from 'react-router-dom'
-//import PropTypes from 'prop-types'
+import PropTypes from 'prop-types'
 import sortBy from 'sort-by'
 import EachBook from './EachBook.js'
 import * as BooksAPI from './BooksAPI'
@@ -97,6 +97,11 @@ class SearchBooks extends Component {
       </div>
     )
   }
+}
+
+SearchBooks.propTypes = {
+  books: PropTypes.array.isRequired,
+  changeShelf: PropTypes.func.isRequired
 }
 
 export default SearchBooks

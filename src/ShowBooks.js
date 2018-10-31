@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-//import PropTypes from 'prop-types'
+import PropTypes from 'prop-types'
 import sortBy from 'sort-by'
 import EachBook from './EachBook.js'
 
@@ -56,6 +56,11 @@ class ShowBooks extends Component {
       </div>
     )
   }
+}
+
+ShowBooks.propTypes = {
+  books: PropTypes.array.isRequired,
+  changeShelf: PropTypes.func.isRequired
 }
 
 export default ShowBooks
