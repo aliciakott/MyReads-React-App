@@ -15,6 +15,7 @@ class BooksApp extends React.Component {
   componentDidMount() {
     BooksAPI.getAll()
       .then((books) => {
+        console.log(books)
         // the array of objects get passed to the state
         this.setState({
           books: books
@@ -53,7 +54,7 @@ class BooksApp extends React.Component {
   }
 
   // Main and search pages are displayed by passing the state of books and
-  // the function updateShelf, as props to the children components 
+  // the function updateShelf, as props to the children components
   render() {
     return (
       <div className="app">

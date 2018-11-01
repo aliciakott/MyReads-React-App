@@ -114,3 +114,16 @@ Please verify you have the following lines at the top of the file:
 ```
 import PropTypes from 'prop-types'
 ```
+
+
+### Contributing
+
+This assignment was completed as part of a Udacity Nanodegree. As such, no pull requests will accepted at this time.
+
+
+### Licensing
+
+MIT License
+
+React and the packages used to build this app are free to use. Also, the starter code comes from Udacity (_Click_ [Udacity's MyReads Starter Code](https://github.com/udacity/reactnd-project-myreads-starter) _to learn more_). The component JS files were written by me; Submitting it as your own work is plagiarism and violates Udacity's Code of Honor,
+which may result in your expulsion from your nanodegree program.  

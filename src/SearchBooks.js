@@ -26,6 +26,7 @@ class SearchBooks extends Component {
       // an object, either of which are then passed to the state
       BooksAPI.search(newQuery)
         .then((results) => {
+          console.log(results)
           this.setState({
             searchResults: results,
           })
@@ -95,14 +96,17 @@ class SearchBooks extends Component {
           </div>
         </div>
 
-        // conditional statement checks if an array of search results exists, and displays them.
-        // otherwise a message warning the user that their terms returned no matches is shown
+        {/*
+        conditional statement checks if an array of search results exists, and displays them.
+        otherwise a message warning the user that their terms returned no matches is shown
+
+        instead of typing out the list item again, we pass the book-object and changeShelf function
+        to a child component, which then takes the values of the object keys and renders DOM elements
+        */}
         {Array.isArray(books) ? (
           <div className="search-books-results">
             <ol className="books-grid">
             {books.map(book =>
-              // instead of typing out the list item again, we pass the book-object and changeShelf function
-              // to a child component, which then takes the values of the object keys and renders DOM elements
               <EachBook book={book} changeShelf={this.props.changeShelf} key={book.id}/>
             )}
             </ol>
