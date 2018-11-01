@@ -15,7 +15,6 @@ class BooksApp extends React.Component {
   componentDidMount() {
     BooksAPI.getAll()
       .then((books) => {
-        console.log(books)
         // the array of objects get passed to the state
         this.setState({
           books: books

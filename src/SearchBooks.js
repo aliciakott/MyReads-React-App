@@ -26,7 +26,6 @@ class SearchBooks extends Component {
       // an object, either of which are then passed to the state
       BooksAPI.search(newQuery)
         .then((results) => {
-          console.log(results)
           this.setState({
             searchResults: results,
           })
